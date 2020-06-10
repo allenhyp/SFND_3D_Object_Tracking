@@ -173,7 +173,7 @@ void matchBoundingBoxes(std::vector<cv::DMatch> &matches, std::map<int, int> &bb
         int maxMatchCount = 0, maxMatchBBId = -1;
         for (auto match : enclosedMatches)
         {
-            int currKeypointIdx = match.queryIdx;
+            int currKeypointIdx = match.trainIdx;
             cv::Point currKeypoint = currFrame.keypoints.at(currKeypointIdx).pt;
             for (auto currBoundingBox : currFrame.boundingBoxes)
             {
@@ -189,6 +189,8 @@ void matchBoundingBoxes(std::vector<cv::DMatch> &matches, std::map<int, int> &bb
                 }
             }
         }
+
+        cout << "Best matches: prevId: " << prevBoundingBox.boxID << ", curId: " << maxMatchBBId << ", with matches: " << maxMatchCount << endl;
 
         if (maxMatchCount > 0)
         {
