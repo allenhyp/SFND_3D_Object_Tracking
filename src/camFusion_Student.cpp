@@ -162,7 +162,7 @@ void clusterKptMatchesWithROI(BoundingBox &boundingBox, std::vector<cv::KeyPoint
     {
         int prevKeypointIdx = match.queryIdx;
         cv::Point prevKeypoint = kptsPrev.at(prevKeypointIdx).pt;
-        if (prevKeypoint.x > upperBound || prevKeypoint.x < lowerBound)
+        if (prevKeypoint.x >= lowerBound && prevKeypoint.x <= upperBound)
             result.push_back(match);
     }
 
