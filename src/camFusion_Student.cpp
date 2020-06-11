@@ -134,7 +134,39 @@ void show3DObjects(std::vector<BoundingBox> &boundingBoxes, cv::Size worldSize, 
 // associate a given bounding box with the keypoints it contains
 void clusterKptMatchesWithROI(BoundingBox &boundingBox, std::vector<cv::KeyPoint> &kptsPrev, std::vector<cv::KeyPoint> &kptsCurr, std::vector<cv::DMatch> &kptMatches)
 {
-    // ...
+    double totalDistance = 0.0, mean, variance = 0.0, stddev, upperBound, lowerBound;
+    std::vector<cv::DMatch> enclosedMatches, result;
+    for (auto match : kptMatches)
+    {
+        int prevKeypointIdx = match.queryIdx;
+        cv::Point prevKeypoint = kptsPrev.at(prevKeypointIdx).pt;
+        if (boundingBox.roi.contains(prevKeypoint))
+        {
+            enclosedMatches.push_back(match);
+            totalDistance += prevKeypoint.x;
+        }
+    }
+
+    mean = totalDistance / enclosedMatches.size();
+    for (auto match : enclosedMatches)
+    {
+        int prevKeypointIdx = match.queryIdx;
+        cv::Point prevKeypoint = kptsPrev.at(prevKeypointIdx).pt;
+        variance = std::pow(prevKeypoint.x - mean, 2);
+    }
+    stddev = std::sqrt(variance / (enclosedMatches.size() - 1));
+    upperBound = mean + 2 * stddev;
+    lowerBound = mean - 2 * stddev;
+
+    for (auto match : enclosedMatches)
+    {
+        int prevKeypointIdx = match.queryIdx;
+        cv::Point prevKeypoint = kptsPrev.at(prevKeypointIdx).pt;
+        if (prevKeypoint.x > upperBound || prevKeypoint.x < lowerBound)
+            result.push_back(match);
+    }
+
+    boundingBox.kptMatches = result;
 }
 
 
