@@ -40,7 +40,7 @@ In this final project, you will implement the missing parts in the schematic. To
 The TTC computation using Lidar information was stabler than the one using camera in my case. Taking the computation result between every 2 frames were not change too dramatically comparing to the result from camera, and there's no bad result in the sequence until frames after 40. The reason was that it fails frequently in the later frames while detecting the bounding box for the ego-front car. Therefore, under the condition of the bounding box were detected or selected correctly, using Lidar as active sensor to calculate TTC would be a better choice. (It'd be even better if we can compare the computation result with the ground truth for more accurate conclusion.)
 
 ### FP.6 Performance Evaluation 2
-The FAST/BRIEF combination was the fastest pair of detector/descriptor that also generates relatively more keypoints, from the performance evalutation in midtern project. In the following table, we can see the TTC result from camera was relatively stable (left side of the table), comparing to an unreliable combination as HARRIS/ORB (right side of the table).
+The FAST/BRIEF combination was the fastest pair of detector/descriptor that also generates relatively more keypoints, from the performance evalutation in midtern project. I pick up another combination (HARRIS/ORB) as an bad example here to simplify the comparison. In the following table, we can see the TTC result from camera was relatively stable (left side of the table), comparing to an unreliable combination as HARRIS/ORB (right side of the table).
 
 | Frame | Combination | TTC Lidar | TTC Camera | Combination | TTC Lidar | TTC Camera |
 |---|---|---|---|---|---|---|
