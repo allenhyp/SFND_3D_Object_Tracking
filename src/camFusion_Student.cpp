@@ -10,6 +10,7 @@
 
 using namespace std;
 
+bool compareLidarPointDistance(LidarPoint a, LidarPoint b) { return a.x < b.x; }
 
 // Create groups of Lidar points whose projection into the camera falls into the same bounding box
 void clusterLidarWithROI(std::vector<BoundingBox> &boundingBoxes, std::vector<LidarPoint> &lidarPoints, float shrinkFactor, cv::Mat &P_rect_xx, cv::Mat &R_rect_xx, cv::Mat &RT)
@@ -148,7 +149,12 @@ void computeTTCCamera(std::vector<cv::KeyPoint> &kptsPrev, std::vector<cv::KeyPo
 void computeTTCLidar(std::vector<LidarPoint> &lidarPointsPrev,
                      std::vector<LidarPoint> &lidarPointsCurr, double frameRate, double &TTC)
 {
-    // ...
+    std::sort(lidarPointsPrev.begin(), lidarPointsPrev.end(), compareLidarPointDistance);
+    std::sort(lidarPointsCurr.begin(), lidarPointsCurr.end(), compareLidarPointDistance);
+    double prevMedianX = lidarPointsPrev[lidarPointsPrev.size() / 2].x;
+    double currMedianX = lidarPointsCurr[lidarPointsCurr.size() / 2].x;
+    double dt = 1.0 / frameRate;
+    TTC = currMedianX * dt / (prevMedianX - currMedianX);
 }
 
 
@@ -190,7 +196,7 @@ void matchBoundingBoxes(std::vector<cv::DMatch> &matches, std::map<int, int> &bb
             }
         }
 
-        cout << "Best matches: prevId: " << prevBoundingBox.boxID << ", curId: " << maxMatchBBId << ", with matches: " << maxMatchCount << endl;
+        // cout << "Best matches: prevId: " << prevBoundingBox.boxID << ", curId: " << maxMatchBBId << ", with matches: " << maxMatchCount << endl;
 
         if (maxMatchCount > 0)
         {
