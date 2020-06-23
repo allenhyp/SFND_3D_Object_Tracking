@@ -36,6 +36,22 @@ In this final project, you will implement the missing parts in the schematic. To
 
 ## Reflection
 
+### FP.1 Match 3D Objects
+Implement the method "matchBoundingBoxes", which takes as input both the previous and the current data frames and provides as output the ids of the matched regions of interest (i.e. the boxID property). 
+[camFusion_Student.cpp (line 238 ~ 283)](https://github.com/allenhyp/SFND_3D_Object_Tracking/blob/master/src/camFusion_Student.cpp)
+
+### FP.2 Compute Lidar-based TTC
+Compute the time-to-collision in second for all matched 3D objects using only Lidar measurements from the matched bounding boxes between current and previous frame.
+[camFusion_Student.cpp (line 226 ~ 235)](https://github.com/allenhyp/SFND_3D_Object_Tracking/blob/master/src/camFusion_Student.cpp)
+
+### FP.3 Associate Keypoint Correspondences with Bounding Boxes
+Prepare the TTC computation based on camera measurements by associating keypoint correspondences to the bounding boxes which enclose them.
+[camFusion_Student.cpp (line 135 ~ 174)](https://github.com/allenhyp/SFND_3D_Object_Tracking/blob/master/src/camFusion_Student.cpp)
+
+### FP.4 Compute Camera-based TTC
+Compute the time-to-collision in second for all matched 3D objects using only keypoint correspondences from the matched bounding boxes between current and previous frame.
+[camFusion_Student.cpp (line 148 ~ 209)](https://github.com/allenhyp/SFND_3D_Object_Tracking/blob/master/src/camFusion_Student.cpp)
+
 ### FP.5 Performance Evaluation 1
 The TTC computation using Lidar information was stabler than the one using camera in my case. Taking the computation result between every 2 frames were not change too dramatically comparing to the result from camera, and there's no bad result in the sequence until frames after 40. The reason was that it fails frequently in the later frames while detecting the bounding box for the ego-front car. Therefore, under the condition of the bounding box were detected or selected correctly, using Lidar as active sensor to calculate TTC would be a better choice. (It'd be even better if we can compare the computation result with the ground truth for more accurate conclusion.)
 
